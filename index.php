@@ -3,6 +3,16 @@
     require_once('conexao.php');
     include_once('layout/_header.php');
 
+    if(isset($_GET['excluir'])){
+        $id = filter_input(INPUT_GET, 'excluir', FILTER_SANITIZE_NUMBER_INT);
+
+        if($id){
+            $conect->exec('DELETE FROM testephp.produtos WHERE id=' .$id);
+        }
+        header('Location: index.php');
+        exit;
+    }
+
     $results = $conect->query('SELECT * FROM produtos')
     // echo'<pre>';
     // print_r($dados);   
@@ -37,7 +47,7 @@
                         <td><?= $item['ativo'] ?></td>
                         <td>
                             <a class="btn btn-sm btn-primary" href="cadastro.php?id=<?= $item['id']?>">Editar</a>
-                            <button class="btn btn-sm btn-danger">Remover</button>
+                            <button class="btn btn-sm btn-danger" onclick="excluir(<?= $item['id']?>)">Remover</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -46,7 +56,13 @@
         </table>
     </div>
 </div>
-
+<script>
+    function excluir(id){
+        if(confirm("Deseja excluir este produto?")){
+            window.location.href = "index.php?excluir=" + id;
+        }
+    }
+</script>
 
 
 

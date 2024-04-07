@@ -8,33 +8,6 @@
     $valor = 0;
     $ativo = 0;
 
-    if (isset($_GET['id'])){
-        $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
-
-        if(!$id){
-            header('Location: index.php');
-            exit;
-        }
-
-        $stm = $conect->prepare('SELECT * FROM testephp.produtos WHERE id=:id');
-        $stm->bindValue('id', $id);
-        $stm->execute();
-        $result = $stm->fetch();
-
-        if(!$result){
-            header('Location: index.php');
-            exit;
-        }
-
-        $nome = $result['nome'];
-        $quantidade = $result['quantidade'];
-        $NCM = $result['NCM'];
-        $valor = $result['valor'];
-        $ativo = $result['ativo'];
-    }
-
-
-
     if (isset($_POST['id'])) {
         $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
         $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -60,6 +33,31 @@
 
         header('Location: index.php');
         exit;
+    }
+
+    if (isset($_GET['id'])){
+        $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
+
+        if(!$id){
+            header('Location: index.php');
+            exit;
+        }
+
+        $stm = $conect->prepare('SELECT * FROM testephp.produtos WHERE id=:id');
+        $stm->bindValue('id', $id);
+        $stm->execute();
+        $result = $stm->fetch();
+
+        if(!$result){
+            header('Location: index.php');
+            exit;
+        }
+
+        $nome = $result['nome'];
+        $quantidade = $result['quantidade'];
+        $NCM = $result['NCM'];
+        $valor = $result['valor'];
+        $ativo = $result['ativo'];
     }
 
     include_once('layout/_header.php');
@@ -91,8 +89,8 @@
         <div class="form-group">
             <label for="nome">Situacao</label>
             <select class="form-select" id="ativo" name="ativo">
-                <option value = "1" <?= $ativo==1??'selected' ?>>Ativo</option>
-                <option value = "0" <?= $ativo==0??'selected' ?>>Inativo</option>
+                <option value = "1" <?= $ativo==1?'selected':'' ?>>Ativo</option>
+                <option value = "0" <?= $ativo==0?'selected':'' ?>>Inativo</option>
             </select>
         </div>
     </div>
